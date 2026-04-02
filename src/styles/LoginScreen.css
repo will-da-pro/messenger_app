@@ -1,0 +1,26 @@
+.login-screen {
+    width: 30rem;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.login-screen h1 {
+    text-align: center;
+    font-size: 4rem;
+}
+
+.login-screen form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.login-screen input {
+    width: 100%;
+}

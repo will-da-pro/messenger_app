@@ -1,0 +1,11 @@
+.create-channel-screen {
+    margin: 4rem auto 0;
+    padding: 2rem;
+    width: 40rem;
+}
+
+.create-channel-screen form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

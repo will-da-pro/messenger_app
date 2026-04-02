@@ -1,0 +1,50 @@
+#nav-bar {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 4rem;
+    padding: 0 1rem;
+    gap: 1rem;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-bottom: var(--secondary-color) solid 2px;
+    background-color: var(--primary-color);
+}
+
+.nav-bar-component {
+    font-size: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-bar-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.nav-bar-title {
+    cursor: pointer;
+}
+
+.nav-bar-title:hover {
+    color: var(--accent-color);
+}
+
+.horizontal-divider {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.nav-bar-button {
+    cursor: pointer;
+}
+
+.nav-bar-button:hover {
+    color: var(--accent-color);
+}

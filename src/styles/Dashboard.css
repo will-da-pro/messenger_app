@@ -1,0 +1,47 @@
+#main-container {
+    height: 100vh;
+    padding-top: 4rem;
+}
+
+.sidebar {
+    height: 100%;
+    position: relative;
+    overflow-y: hidden;
+}
+
+.content {
+    overflow-y: scroll;
+}
+
+.sidebar, .content {
+    padding: 0;
+}
+
+#sidebar {
+    display: none;
+}
+
+.wrapper {
+    display: flex;
+}
+
+.left, .right {
+    height: 100%;
+}
+
+.left {
+    overflow: auto;
+}
+
+.right {
+    flex: 1;
+}
+
+.resize-handle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-right: var(--secondary-color) solid 2px;
+}
