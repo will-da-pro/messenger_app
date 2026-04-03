@@ -1,4 +1,4 @@
-import {type FormEvent, useEffect, useState, useRef, useContext} from "react";
+import {type FormEvent, useEffect, useState, useRef, useContext, Fragment} from "react";
 import type {User} from "./Dashboard.tsx";
 import axios, {AxiosError} from "axios";
 import {useNavigate} from "react-router-dom";
@@ -283,26 +283,37 @@ const ChannelView = () => {
             </div>
             <div className="messages">
                 {messages?.map((item: Message, index: number) => (
-                    <>
+                    <Fragment key={item.id}>
                         {index > 0 && Date.parse(messages[index - 1].created_at) < Date.parse(item.created_at) - 120000 && <div className="message-divider" />}
-                        <div className="message-item" key={item.id} onClick={() => {
+                        <div className="message-item" onClick={() => {
                             setReplyTo(item);
                             scrollToBottom();
                         }}>
-                            {item.reply_to && <p className="reply-to">{`╭─── Replying to: ${users.find(obj => obj.id === messages.find(obj => obj.id === item.reply_to)?.author)?.username} • ${messages.find(obj => obj.id === item.reply_to)?.content}`}</p>}
+                            {item.reply_to && <p className="reply-to">
+                                <svg className="reply-line" width="20" height="14" viewBox="0 0 20 14" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                                    <path d="M20 1.5 H7.5 A6 6 0 0 0 1.5 7.5 V14"/>
+                                </svg>
+                                {` ${users.find(obj => obj.id === messages.find(obj => obj.id === item.reply_to)?.author)?.username} `}
+                                <span className="reply-text">{messages.find(obj => obj.id === item.reply_to)?.content}</span>
+                            </p>}
                             {(index === 0 ||
                                 messages[index - 1].author !== item.author ||
                                 Date.parse(messages[index - 1].created_at) < Date.parse(item.created_at) - 120000) &&
-                                <h2 className="author" key={index}>{`${getName(item.author)} • ${new Date(item.created_at).toLocaleString()}`}</h2>}
+                                <h2 className="author">{getName(item.author)} <span className="message-timestamp">{new Date(item.created_at).toLocaleString()}</span></h2>
+                            }
+
                             <p className="contents">{item.content}</p>
                         </div>
-                    </>))
+                    </Fragment>))
                 }
                 <div ref={messagesEndRef} />
             </div>
             <div className="channel-view-footer">
                 {reply_to && <div className="reply-to-selection">
-                    <p className="reply-to">{`Replying to: ${users.find(obj => obj.id === reply_to.author)?.username} • ${reply_to.content}`}</p>
+                    <p className="reply-to">
+                        {`Replying to: ${users.find(obj => obj.id === reply_to.author)?.username} `}
+                        <span className="reply-text">{reply_to.content}</span>
+                    </p>
                     <FaTimes className="cancel-reply" onClick={() => {setReplyTo(null)}} />
                 </div>}
                 <form className="message-form" onSubmit={handleSubmit}>

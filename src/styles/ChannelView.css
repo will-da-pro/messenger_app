@@ -20,6 +20,12 @@
     background-color: var(--secondary-color);
 }
 
+.message-timestamp, .reply-text {
+    color: var(--grayed-out);
+    font-size: 1rem;
+    font-weight: normal;
+}
+
 .reply-to {
     font-weight: bold;
     font-style: italic;
@@ -27,6 +33,10 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.reply-line {
+    vertical-align: bottom;
 }
 
 .contents {
@@ -49,8 +59,8 @@
 }
 
 .channel-info-button {
-    min-width: 2rem;
-    height: 2rem;
+    min-width: 1.5rem;
+    height: 1.5rem;
     cursor: pointer;
 }
 

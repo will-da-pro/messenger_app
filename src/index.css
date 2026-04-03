@@ -3,8 +3,9 @@
     --secondary-color: #6F8EA5;
     --accent-color: #FAB855;
     --accent-color-2: #55B3FA;
+    --grayed-out: #BBBBBB;
 
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: "Source Code Pro", system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
 
