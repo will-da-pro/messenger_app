@@ -25,6 +25,12 @@ interface Message {
     reply_to: string;
 }
 
+interface WebsocketUpdate {
+    type: string;
+    id?: string;
+    message?: Message;
+}
+
 const ChannelView = () => {
     const navigate = useNavigate();
 
@@ -94,13 +100,6 @@ const ChannelView = () => {
             }
         });
     }
-
-    // Message deletion will be implemented later
-
-    // const deleteMessage = async (id: string) => {
-    //     const updatedMessages = messages.filter(message => message.id !== id);
-    //     setMessages(updatedMessages);
-    // }
 
     useEffect(() => {
         const scrollDown = async () => {
@@ -253,9 +252,31 @@ const ChannelView = () => {
             }
 
             channelWs.onmessage = (event: MessageEvent) => {
-                const message: Message = JSON.parse(event.data);
-                setMessages((prev => prev.concat(message)));
-                scrollToBottom();
+                const update: WebsocketUpdate = JSON.parse(event.data);
+                console.log(update)
+
+                if (update.type === "message") {
+                    const message = update.message;
+                    if (message) {
+                        setMessages((prev => prev.concat(message)));
+                        scrollToBottom();
+                    }
+                }
+
+                if (update.type === "edit") {
+                    const message = update.message;
+                    if (message) {
+                        setMessages((prev => prev.with(prev.findIndex((msg) => msg.id === message.id), message)));
+                        scrollToBottom();
+                    }
+                }
+
+                if (update.type === "delete") {
+                    const messageID = update.id;
+                    if (messageID) {
+                        setMessages((prev => prev.filter(message => message.id !== messageID)));
+                    }
+                }
             }
 
             channelWs.onclose = () => {
@@ -281,8 +302,11 @@ const ChannelView = () => {
 
     const sendMessage = async (message: string, reply_to: string | null = null) => {
         const message_data = {
-            "content": message,
-            "reply_to": reply_to,
+            "type": "message",
+            "message": {
+                "content": message,
+                "reply_to": reply_to,
+            }
         };
 
         ws?.send(JSON.stringify(message_data));
@@ -328,7 +352,12 @@ const ChannelView = () => {
         if (!selected) {
             return;
         }
+        // Don't try to load more messages if none exist on the server
         if (!moreMessages) {
+            return;
+        }
+        // Stops it from trying to load more messages the moment a user clicks on a channel
+        if (isInitialLoad) {
             return;
         }
         try {
