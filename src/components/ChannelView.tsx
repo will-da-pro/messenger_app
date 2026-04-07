@@ -8,6 +8,7 @@ import {SelectedChannelContext} from "../contexts/SelectedChannelContext.ts";
 import {FaTimes, FaEllipsisH} from 'react-icons/fa';
 import {MdSend} from 'react-icons/md';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
+import {UserContext} from "../contexts/UserContext.ts";
 
 interface MessageRequest {
     count: number;
@@ -23,6 +24,7 @@ interface Message {
     content: string;
     created_at: string;
     reply_to: string;
+    edited: boolean;
 }
 
 interface WebsocketUpdate {
@@ -43,6 +45,7 @@ const ChannelView = () => {
     const [showPopup, setShowPopup] = useState<boolean>(false);
     const [moreMessages, setMoreMessages] = useState<boolean>(false);
     const [isInitialLoad, setIsInitialLoad] = useState(true);
+    const [editingMessage, setEditingMessage] = useState<Message | null>(null);
 
     const pageMessageCount: number = 50;
 
@@ -54,6 +57,12 @@ const ChannelView = () => {
         throw new Error("No selected channel context");
     }
     const selected = selectedChannelContext.selected;
+
+    const userContext = useContext(UserContext);
+    if (userContext === undefined) {
+        throw new Error("No user context.");
+    }
+    const user: User | null = userContext.user;
 
     const scrollToBottom = useCallback(() => {
         const container = scrollContainerRef.current;
@@ -312,10 +321,40 @@ const ChannelView = () => {
         ws?.send(JSON.stringify(message_data));
     }
 
+    const sendEdit = async (message_id: string, content:  string) => {
+        const message_data = {
+            "type": "edit",
+            "message": {
+                "id": message_id,
+                "content": content,
+            }
+        }
+
+        ws?.send(JSON.stringify(message_data));
+    }
+
+    const sendDelete = async (message_id: string) => {
+        const message_data = {
+            "type": "delete",
+            "id": message_id,
+        }
+
+        ws?.send(JSON.stringify(message_data));
+    }
+
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        scrollToBottom();
-        await sendMessage(content, reply_to?.id);
+
+        if (editingMessage) {
+            await sendEdit(editingMessage.id, content);
+            setEditingMessage(null);
+        }
+
+        else {
+            scrollToBottom();
+            await sendMessage(content, reply_to?.id);
+        }
+
         setContent("");
         setReplyTo(null);
     }
@@ -429,12 +468,39 @@ const ChannelView = () => {
                     {moreMessages && <div ref={sentryRef} style={{ height: '20px' }} />}
                     {messages?.map((item: Message, index: number) => (
                         <div key={item.id}>
-                            {index > 0 && Date.parse(messages[index - 1].created_at) < Date.parse(item.created_at) - 120000 &&
+                            {(index === 0 ||
+                                messages[index - 1].author !== item.author ||
+                                index > 0 && Date.parse(messages[index - 1].created_at) < Date.parse(item.created_at) - 120000) &&
                                 <div className="message-divider"/>}
-                            <div className="message-item" onClick={() => {
-                                setReplyTo(item);
-                                scrollToBottom();
-                            }}>
+
+                            <div className="message-item">
+                                <div className="message-toolbar">
+                                    <div className="message-toolbar-button" onClick={() => {
+                                        setEditingMessage(null);
+                                        setReplyTo(item);
+                                        scrollToBottom();
+                                    }}>
+                                        <p>Reply</p>
+                                    </div>
+
+                                    { item.author === user?.id &&
+                                        <>
+                                            <div className="message-toolbar-button" onClick={() => {
+                                                setReplyTo(null);
+                                                setEditingMessage(item);
+                                                setContent(item.content);
+                                            }}>
+                                                <p>Edit</p>
+                                            </div>
+                                            <div className="message-toolbar-button" onClick={() => {
+                                                sendDelete(item.id).then();
+                                            }}>
+                                                <p>Delete</p>
+                                            </div>
+                                        </>
+                                    }
+                                </div>
+
                                 {item.reply_to && <p className="reply-to">
                                     <svg className="reply-line" width="20" height="14" viewBox="0 0 20 14" fill="none"
                                          stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
@@ -453,6 +519,8 @@ const ChannelView = () => {
                                 }
 
                                 <p className="contents">{item.content}</p>
+
+                                {item.edited && <p className="edited-message">(edited)</p>}
                             </div>
                         </div>))
                     }
@@ -465,7 +533,16 @@ const ChannelView = () => {
                         <span className="reply-text">{reply_to.content}</span>
                     </p>
                     <FaTimes className="cancel-reply" onClick={() => {
-                        setReplyTo(null)
+                        setReplyTo(null);
+                    }}/>
+                </div>}
+                {editingMessage && <div className="editing-selection">
+                    <p className="editing">
+                        {`Editing: ${users.find(obj => obj.id === editingMessage.author)?.username} `}
+                        <span className="editing-text">{editingMessage.content}</span>
+                    </p>
+                    <FaTimes className="cancel-edit" onClick={() => {
+                        setEditingMessage(null);
                     }}/>
                 </div>}
                 <form className="message-form" onSubmit={handleSubmit}>

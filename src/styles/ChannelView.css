@@ -16,23 +16,47 @@
     height: 100%;
 }
 
-.messages .message-item {
+.message-item {
     padding: 0 0.5rem;
-    cursor: pointer;
+    position: relative;
 }
 
-.messages .message-item:hover {
+.message-item .message-toolbar {
+    display: none;
+}
+
+.message-item:hover {
     border-radius: 0.2rem;
     background-color: var(--secondary-color);
 }
 
-.message-timestamp, .reply-text {
+.message-item:hover .message-toolbar {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    position: absolute;
+    top: -1.5rem;
+    right: 0;
+    padding: 0.5rem 1rem;
+    background-color: var(--secondary-color);
+    border-radius: 0.2rem;
+}
+
+.message-toolbar-button {
+    cursor: pointer;
+}
+
+.message-toolbar-button:hover {
+    color: var(--accent-color);
+}
+
+.message-timestamp, .reply-text, .editing-text, .edited-message {
     color: var(--grayed-out);
     font-size: 1rem;
     font-weight: normal;
 }
 
-.reply-to {
+.reply-to, .editing {
     font-weight: bold;
     font-style: italic;
     color: var(--accent-color);
@@ -103,7 +127,7 @@
     height: 2rem;
 }
 
-.reply-to-selection {
+.reply-to-selection, .editing-selection {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -118,14 +142,14 @@
     border-radius: 5px;
 }
 
-.reply-to-selection .reply-to {
+.reply-to-selection .reply-to, .editing-selection .editing {
     width: 90%;
 }
 
-.reply-to-selection .cancel-reply {
+.reply-to-selection .cancel-reply, .editing-selection .cancel-edit {
     cursor: pointer;
 }
 
-.reply-to-selection .cancel-reply:hover {
+.reply-to-selection .cancel-reply:hover, .editing-selection .cancel-edit:hover {
     color: var(--accent-color);
 }
