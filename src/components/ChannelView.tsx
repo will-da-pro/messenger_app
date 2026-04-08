@@ -546,7 +546,7 @@ const ChannelView = () => {
                     }}/>
                 </div>}
                 <form className="message-form" onSubmit={handleSubmit}>
-                    <div>
+                    <div className="message-form-input">
                         <input
                             id="content"
                             type="content"

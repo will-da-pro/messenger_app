@@ -2,7 +2,33 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
 
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent-color) var(--secondary-color);
+/* Scrollbar */
+
+html {
+    overflow-y: auto;
+    scrollbar-gutter: auto;
+}
+
+*::-webkit-scrollbar {
+    width: 12px;   /* Vertical scrollbar width */
+    height: 12px;  /* Horizontal scrollbar height */
+}
+
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track-piece {
+    background: transparent;   /* Fully transparent track/background */
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--accent-color); /* Semi-transparent thumb */
+    border-radius: 20px;
+    border: 3px solid transparent; /* Optional: creates padding effect */
+}
+
+/* 2. Firefox (and other browsers supporting standard properties) */
+* {
+    scrollbar-width: thin;           /* thin | auto | none */
+    scrollbar-color: var(--accent-color) transparent; /* thumb | track */
 }
