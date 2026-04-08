@@ -58,13 +58,17 @@ const ChannelList = () => {
 
     return (
         <div className="channel-list">
-            {channels.map((item: Channel, index: number) => (
-                <div className={`channel ${selected?.id === item.id && 'selected-channel'}`}
-                     onClick={() => {setSelected(item)}} key={item.id}>
-                    <h2 className="channel-name" key={index}>{item.channel_name}</h2>
-                    <p className="channel-description">{item.channel_description}</p>
-                </div>))
-            }
+            <div className="channel-list-container">
+                {channels.map((item: Channel, index: number) => (
+                    <div className="channel-container" key={index}>
+                        <div className={`channel ${selected?.id === item.id && 'selected-channel'}`}
+                             onClick={() => {setSelected(item)}} key={item.id}>
+                            <h2 className="channel-name" key={index}>{item.channel_name}</h2>
+                            <p className="channel-description">{item.channel_description}</p>
+                        </div>
+                    </div>))
+                }
+            </div>
 
             <div className="create-channel">
                 <button className="create-channel-button" onClick={() => {navigate('/create-channel')}}>
