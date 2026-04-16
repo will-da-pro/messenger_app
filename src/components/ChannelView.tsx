@@ -129,7 +129,6 @@ const ChannelView = () => {
 
     useEffect(() => {
         const fetchMessages = async () => {
-            setIsInitialLoad(true);
             const token = localStorage.getItem('authToken');
             if (!token) {
                 navigate('/login');
@@ -149,6 +148,7 @@ const ChannelView = () => {
                 });
                 setMessages(response.data.results.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()));
                 setMoreMessages(response.data.next !== null);
+                setIsInitialLoad(true);
             } catch (err: unknown) {
                 if (err instanceof Error) {
                     setError(err.message);
@@ -548,6 +548,7 @@ const ChannelView = () => {
                 <form className="message-form" onSubmit={handleSubmit}>
                     <div className="message-form-input">
                         <input
+                            autoComplete="off"
                             id="content"
                             type="content"
                             value={content}

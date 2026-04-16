@@ -7,6 +7,7 @@ import SettingsScreen from "./components/SettingsScreen.tsx";
 import { UserContext } from "./contexts/UserContext.ts";
 import {useState} from "react";
 import CreateChannel from "./components/CreateChannel.tsx";
+import NotFound from "./components/NotFound.tsx";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
@@ -21,6 +22,8 @@ function App() {
                     <Route path="/register" element={<RegisterScreen />} />
                     <Route path="/settings" element={<SettingsScreen />} />
                     <Route path="/create-channel" element={<CreateChannel />} />
+
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </Router>
         </UserContext.Provider>

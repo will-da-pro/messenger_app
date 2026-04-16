@@ -51,6 +51,7 @@
 .create-channel {
     width: 100%;
     padding: 1rem;
+    /* border-top: 1px solid var(--secondary-color); */
 }
 
 .create-channel-button {
