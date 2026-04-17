@@ -510,9 +510,15 @@ const ChannelView = () => {
                                          stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                                         <path d="M20 1.5 H7.5 A6 6 0 0 0 1.5 7.5 V14"/>
                                     </svg>
-                                    {` ${users.find(obj => obj.id === messages.find(obj => obj.id === item.reply_to)?.author)?.username} `}
+                                    {` ${
+                                        users.find(obj => obj.id === messages.find(obj => obj.id === item.reply_to)?.author)?.username
+                                        || "unknown"
+                                    } `}
                                     <span
-                                        className="reply-text">{messages.find(obj => obj.id === item.reply_to)?.content}</span>
+                                        className="reply-text">{
+                                        messages.find(obj => obj.id === item.reply_to)?.content
+                                        || "Message not loaded"
+                                    }</span>
                                 </p>}
                                 {(index === 0 ||
                                         messages[index - 1].author !== item.author ||
