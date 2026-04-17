@@ -476,7 +476,11 @@ const ChannelView = () => {
                             <div className="message-item">
                                 <div className="message-toolbar">
                                     <div className="message-toolbar-button" onClick={() => {
-                                        setEditingMessage(null);
+                                        if (editingMessage) {
+                                            setContent("");
+                                            setEditingMessage(null);
+                                        }
+
                                         setReplyTo(item);
                                         scrollToBottom();
                                     }}>
@@ -543,6 +547,7 @@ const ChannelView = () => {
                     </p>
                     <FaTimes className="cancel-edit" onClick={() => {
                         setEditingMessage(null);
+                        setContent("");
                     }}/>
                 </div>}
                 <form className="message-form" onSubmit={handleSubmit}>
@@ -550,7 +555,7 @@ const ChannelView = () => {
                         <input
                             autoComplete="off"
                             id="content"
-                            type="content"
+                            type="text"
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             placeholder="Enter message"

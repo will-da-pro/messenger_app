@@ -100,7 +100,6 @@ const CreateChannel = () => {
                         id="channel_description"
                         onChange={(e) => setDescription(e.target.value)}
                         value={description}
-                        required
                     />
                     {error.channel_description?.map((item: string) => (
                         <p className="error-message">{item}</p>

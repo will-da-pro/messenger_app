@@ -247,7 +247,10 @@ const ChannelInfoPopup = (props: ChannelInfoPopupProps) => {
 
                 <div className="divider" />
 
-                <pre>{props.channel.channel_description}</pre>
+                <pre>{
+                    props.channel.channel_description !== "" && props.channel.channel_description
+                    || <i>No channel description</i>
+                }</pre>
 
                 <div className="divider" />
 
@@ -318,7 +321,6 @@ const ChannelInfoPopup = (props: ChannelInfoPopupProps) => {
                                 id="channel_description"
                                 onChange={(e) => setChannelDescription(e.target.value)}
                                 value={channel_description}
-                                required
                             />
                             {editChannelError.channel_description?.map((item: string) => (
                                 <p className="error-message">{item}</p>

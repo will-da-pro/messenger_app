@@ -64,7 +64,10 @@ const ChannelList = () => {
                         <div className={`channel ${selected?.id === item.id && 'selected-channel'}`}
                              onClick={() => {setSelected(item)}} key={item.id}>
                             <h2 className="channel-name" key={index}>{item.channel_name}</h2>
-                            <p className="channel-description">{item.channel_description}</p>
+                            <p className="channel-description">{
+                                item.channel_description !== "" && item.channel_description
+                                || <i>No channel description</i>
+                            }</p>
                         </div>
                     </div>))
                 }

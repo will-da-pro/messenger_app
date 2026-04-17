@@ -10,7 +10,7 @@
 }
 
 .content {
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .sidebar, .content {
