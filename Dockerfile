@@ -12,6 +12,7 @@ FROM nginx:stable-alpine as production
 # COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/ssl /etc/nginx/ssl
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
