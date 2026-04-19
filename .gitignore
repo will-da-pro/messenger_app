@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# SSL Certificate
+nginx/ssl/*.key
+nginx/ssl/*.crt
+nginx/ssl/*.pem
